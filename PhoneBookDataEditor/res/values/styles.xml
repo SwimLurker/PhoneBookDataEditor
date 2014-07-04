@@ -22,13 +22,25 @@
     
     </style>
 
-	<style name="PhoneBookList" parent="android:Theme">
+	<style name="Main" parent="android:Theme">
 	    <!-- <item name="android:windowTitleSize">50dp</item> -->
 	     <item name="android:windowTitleBackgroundStyle">@style/TitleBarBackground</item>
 	     <item name="android:windowTitleSize">56dip</item>
 	     <item name="android:windowContentOverlay">@android:color/transparent</item>
 	</style>
-	<style name="notitle">
+	<style name="NoTitle">
 	    <item name="android:windowNoTitle">true</item>
 	</style>
+	<style name="ButtonBar">
+	    <item name="android:paddingTop">0dip</item>
+	    <item name="android:paddingLeft">0dip</item>
+	    <item name="android:paddingRight">0dip</item>
+	    <item name="android:paddingBottom">1dip</item>
+	    <item name="android:background">@drawable/button_bar_bk</item>
+	</style>
+	<style name="MyCheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
+   		<item name="android:button">@layout/selector_checkbox</item>
+   		<item name="android:paddingLeft">25.0dip</item>
+   		<item name="android:maxHeight">10.0dip</item>
+   </style>
 </resources>

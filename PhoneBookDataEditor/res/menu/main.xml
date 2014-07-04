@@ -1,9 +1,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/menuitem_open"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/action_settings"/>
-
+        android:title="@string/menuitem_open"
+        android:icon="@layout/selector_btn_open" />
+    <item
+        android:id="@+id/menuitem_save"
+        android:orderInCategory="101"
+        android:showAsAction="never"
+        android:title="@string/menuitem_save"
+        android:icon="@layout/selector_btn_save" />
+	<item
+        android:id="@+id/menuitem_about"
+        android:orderInCategory="102"
+        android:showAsAction="never"
+        android:title="@string/menuitem_about"
+        android:icon="@layout/selector_btn_about" />
 </menu>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants" >
+     
+	<ImageView 
+	    android:id="@+id/iv_list_map"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:src="@drawable/photo"   />
+    <TextView
+        android:id="@+id/tv_list_text_map"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="16sp"
+        android:layout_toRightOf="@+id/iv_list_map"
+	    android:layout_alignBottom="@+id/iv_list_map" />
+	<CheckBox
+        android:id="@+id/cb_list_checked_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignBaseline="@+id/iv_list_map"
+        style="@style/MyCheckBox" />"
+</RelativeLayout>

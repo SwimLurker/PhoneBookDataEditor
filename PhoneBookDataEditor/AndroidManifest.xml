@@ -12,11 +12,11 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/Main" >
          <activity
             android:name="com.nnit.phonebook.dataeditor.SplashActivity"
             android:label="@string/app_name"
-            android:theme="@style/notitle" >
+            android:theme="@style/NoTitle" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -25,12 +25,37 @@
         <activity
             android:name="com.nnit.phonebook.dataeditor.MainActivity"
             android:label="@string/app_name" >
-            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+        </activity>
+        <activity
+            android:name="com.nnit.phonebook.dataeditor.EditPhoneBookActivity" >
+            <intent-filter>
+                <action android:name="com.nnit.phonebook.dataeditor.EditPhoneBookActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.nnit.phonebook.dataeditor.NewPhoneBookActivity" >
+            <intent-filter>
+                <action android:name="com.nnit.phonebook.dataeditor.NewPhoneBookActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.nnit.phonebook.dataeditor.NewMapActivity"
+            android:theme="@style/DarkTheme" >
+            <intent-filter>
+                <action android:name="com.nnit.phonebook.dataeditor.NewMapActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.nnit.phonebook.dataeditor.EditSeatPositionActivity" >
+            <intent-filter>
+                <action android:name="com.nnit.phonebook.dataeditor.EditSeatPositionActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>
-
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 </manifest>

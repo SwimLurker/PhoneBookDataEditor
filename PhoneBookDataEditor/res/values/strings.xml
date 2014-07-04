@@ -2,7 +2,19 @@
 <resources>
 
     <string name="app_name">PhoneBook Data Editor</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
-
+    <string name="maintitle"> Data Editor</string>
+	<string name="menuitem_open"> Open File...</string>
+	<string name="menuitem_save"> Save to File...</string>
+	<string name="menuitem_about"> About</string>
+	<string name="phonebooklist_title"> Phone Book List</string>
+	<string name="maplist_title"> Map List</string>
+	<string name="selectphonebooklist_title"> Phone Book List</string>
+	<string name="selectmaplist_title"> Map List</string>
+	<string name="version">PhoneBook Data Editor Android v1.0</string>
+    <string name="author">by CQLI</string>
+    <string name="searchby_initials">Initials:</string>
+    <string name="searchby_name">Name:</string>
+    <string name="searchby_phone">Phone:</string>
+    <string name="searchby_depName">Dep. Name:</string>
+    <string name="searchby_manager">Manager:</string>
 </resources>

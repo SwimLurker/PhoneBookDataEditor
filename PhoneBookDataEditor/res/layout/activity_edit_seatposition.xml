@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+	<LinearLayout
+	    android:id="@+id/edit_seatpos_titlelayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_title_height"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#2f1f22" >
+
+            <include layout="@layout/titlebar_edit_seatpos" />
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/edit_seatpos_floorpanellayout"
+            android:layout_height="@dimen/map_floorpanel_height"
+            android:layout_width="match_parent"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Floor Number:"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
+
+            <Spinner
+                android:id="@+id/edit_seatpos_floor"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+           
+                    <com.nnit.phonebook.dataeditor.ui.MapView
+                        android:id="@+id/edit_seatpos_map"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:scaleType="matrix"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                    >
+                    <requestFocus />
+                    </com.nnit.phonebook.dataeditor.ui.MapView>
+              
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal" >
+                <ImageButton
+                    android:id="@+id/edit_seatpos_map_zoomin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@layout/selector_btn_zoomin" />
+
+                <ImageButton
+                    android:id="@+id/edit_seatpos_map_zoomout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@layout/selector_btn_zoomout" />
+
+                <ImageButton
+                    android:id="@+id/edit_seatpos_map_locate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@layout/selector_btn_locate" />
+                <ToggleButton
+                    android:id="@+id/edit_seatpos_map_fullscreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOn=""
+                    android:textOff=""
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@layout/selector_btn_fullscreen" />
+            </LinearLayout>
+            
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_alignParentLeft="true"
+                android:orientation="vertical" 
+                android:paddingLeft="10dp">
+                <ToggleButton
+                    android:id="@+id/edit_seatpos_map_pen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOn=""
+                    android:textOff=""
+                    android:layout_marginTop="10dp"
+                    android:background="@layout/selector_btn_pen" />
+                <ImageButton
+                    android:id="@+id/edit_seatpos_map_rotate_clockwise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@layout/selector_btn_rotate_clockwise" />
+				<ImageButton
+                    android:id="@+id/edit_seatpos_map_rotate_counterclockwise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@layout/selector_btn_rotate_counterclockwise" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/edit_seatpos_infopanellayout"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/map_infopanel_height"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0" >
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="X:"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/edit_seatpos_x"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="4"
+                        android:inputType="number"
+                        android:textSize="12sp" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="Width:"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/edit_seatpos_width"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="4"
+                        android:inputType="number"
+                        android:textSize="12sp" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="Direction:"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/edit_seatpos_direction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="4"
+                        android:inputType="number"
+                        android:textSize="12sp" />
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:orientation="horizontal" >
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="Y:"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/edit_seatpos_y"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="4"
+                        android:inputType="number"
+                        android:textSize="12sp" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="Height:"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/edit_seatpos_height"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="4"
+                        android:inputType="number"
+                        android:textSize="12sp" />
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

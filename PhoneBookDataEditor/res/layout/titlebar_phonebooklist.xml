@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/titlebar_phonebooklist"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:visibility="visible" 
+    >
+   	
+     <TextView
+         android:id="@+id/textview_phonebooklist_title"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:gravity="center_vertical"
+        android:text="@string/phonebooklist_title" 
+        android:textSize="16dp"/>
+     <LinearLayout 
+	    android:layout_width="wrap_content"
+	    android:layout_height="fill_parent"
+	    android:layout_alignParentRight="true"
+	    android:orientation="horizontal" >
+	     <ImageButton
+	        android:id="@+id/imagebtn_phonebooklist_new"
+	        android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:layout_gravity="center"
+	    	android:layout_marginRight="1dp"
+	        android:background="@layout/selector_btn_new" />
+	    <ImageButton
+	        android:id="@+id/imagebtn_phonebooklist_search"
+        	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:layout_gravity="center"
+	    	android:layout_marginRight="1dp"
+        	android:background="@layout/selector_btn_search" />
+    </LinearLayout>
+</RelativeLayout>
