@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -18,14 +19,15 @@ public class SplashActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_splash);
 		
 		final ImageView image = (ImageView)findViewById(R.id.splash_image);
 		
 		final AnimationSet as = new AnimationSet(false);
 		
-		final Animation ani1 = new ScaleAnimation(1f,1.2f, 1f, 1.2f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.3f);
-		final Animation ani2 = new AlphaAnimation(1.0f, 0.5f);
+		final Animation ani1 = new ScaleAnimation(1f,1.1f, 1f, 1.1f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.3f);
+		final Animation ani2 = new AlphaAnimation(1.0f, 0.3f);
 		
 		as.addAnimation(ani1);
 		as.addAnimation(ani2);
@@ -36,7 +38,7 @@ public class SplashActivity extends Activity {
 		
 		ani2.setDuration(SPLASH_DISPLAY_LENGTH);
 		ani2.setFillAfter(true);
-		ani2.setStartOffset(2500);
+		ani2.setStartOffset(2000);
 		
 		//as.setFillAfter(true);
 		

@@ -11,6 +11,7 @@ import com.nnit.phonebook.dataeditor.data.PhoneBookItem;
 import com.nnit.phonebook.dataeditor.data.SeatInfo;
 import com.nnit.phonebook.dataeditor.data.PhoneBookItem.GENDER;
 import com.nnit.phonebook.dataeditor.ui.CompositedImageGetter;
+import com.nnit.phonebook.dataeditor.ui.ISeatPositionChangedListener;
 import com.nnit.phonebook.dataeditor.ui.ImageLoader;
 import com.nnit.phonebook.dataeditor.ui.MapView;
 import com.nnit.phonebook.dataeditor.ui.RealSizeImageGetter;
@@ -53,56 +54,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-public class EditSeatPositionActivity extends Activity {
-
-	public static final float MIN_SCALE = 0.2f;
-	public static final float MAX_SCALE = 2f;
-
-	private PointF start = new PointF();
-	private PointF mid = new PointF();
-	private int mapViewWidth, mapViewHeight;
-	private int bitmapWidth, bitmapHeight;
-	private float beforeLength;
-	private int floorPanelHeight, infoPanelHeight;
-	private boolean calculateMapSize = false;
-	private Matrix matrix = new Matrix();
-	private Matrix savedMatrix = new Matrix();
-
-	private static Paint mapPaint = null;
-	private static Paint textPaint = null;
-	private static Paint positionPaint = null;
-
-	static {
-		mapPaint = new Paint();
-		mapPaint.setColor(Color.RED);
-		mapPaint.setStrokeWidth(10);
-
-		textPaint = new Paint();
-		textPaint.setTextSize(40);
-		textPaint.setColor(Color.BLACK);
-		textPaint.setTypeface(Typeface.DEFAULT);
-
-		positionPaint = new Paint();
-		positionPaint.setColor(Color.RED);
-		positionPaint.setStrokeWidth(10);
-	}
-
-	private enum MODE {
-		NONE, DRAG, ZOOM, PEN
-	}
-	
-	private enum PENMODE{
-		RELEASE, DOWN, MOVE
-	}
-
-	private MODE mode = MODE.NONE;
-	
+public class EditSeatPositionActivity extends Activity implements ISeatPositionChangedListener {	
 	private String initials = null;
 	private SeatInfo seatInfo = null;
 	private SeatInfo newSeatInfo = null;
 	
-	private Resources resources = null;
-
 	private Spinner floorSpinner;
 	private MapView mapIV;
 	private EditText xET;
@@ -110,8 +66,6 @@ public class EditSeatPositionActivity extends Activity {
 	private EditText widthET;
 	private EditText heightET;
 	private EditText directionET;
-	private Bitmap mapImage;
-	
 	private ToggleButton fullscreenBtn = null;
 	private ToggleButton penBtn = null;
 	private ImageButton rotateBtn = null;
@@ -123,10 +77,6 @@ public class EditSeatPositionActivity extends Activity {
 	private LinearLayout floorPanelLayout = null;
 	private LinearLayout infoPanelLayout = null;
 	
-	private int seatPosFloor;
-	private int seatPosX, seatPosY, seatPosWidth, seatPosHeight, seatPosDirection;
-	private int penStartPosX, penStartPosY;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -135,23 +85,21 @@ public class EditSeatPositionActivity extends Activity {
 
 		setContentView(R.layout.activity_edit_seatposition);
 
-		initials = (String) getIntent().getSerializableExtra(
-				EditPhoneBookActivity.SELECTED_INITIALS);
+		initials = (String) getIntent().getSerializableExtra(EditPhoneBookActivity.SELECTED_INITIALS);
 
 		seatInfo = DataManager.getInstance().getSeatInfoByInitial(initials);
-
-		resources = getResources();
-		floorPanelHeight = (int) resources.getDimension(R.dimen.map_floorpanel_height);
-		infoPanelHeight = (int) resources.getDimension(R.dimen.map_infopanel_height);
-		calculateMapSize = true;
-		
 		
 		mapIV = (MapView) findViewById(R.id.edit_seatpos_map);
+		
+		mapIV.addSeatPositionListener(this);
+		
 		xET = (EditText) findViewById(R.id.edit_seatpos_x);
 		yET = (EditText) findViewById(R.id.edit_seatpos_y);
 		widthET = (EditText) findViewById(R.id.edit_seatpos_width);
 		heightET = (EditText) findViewById(R.id.edit_seatpos_height);
 		directionET = (EditText) findViewById(R.id.edit_seatpos_direction);
+		
+		
 		
 		floorSpinner = (Spinner) findViewById(R.id.edit_seatpos_floor);
 		List<Integer> mapsFloors = DataManager.getInstance().getMapFloors();
@@ -161,6 +109,8 @@ public class EditSeatPositionActivity extends Activity {
 		
 		floorSpinner.setAdapter(floorNoAdapter);
 
+		int seatPosFloor, seatPosX, seatPosY, seatPosWidth, seatPosHeight, seatPosDirection;
+		
 		if (seatInfo != null) {
 			seatPosFloor = seatInfo.getFloorNo();
 			seatPosX = seatInfo.getX();
@@ -184,23 +134,21 @@ public class EditSeatPositionActivity extends Activity {
 		heightET.setText(Integer.toString(seatPosHeight));
 		directionET.setText(Integer.toString(seatPosDirection));
 		
+		
+		updateSeatPositionInfo();
+		
 		OnFocusChangeListener ocl = new OnFocusChangeListener(){
 
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if(!hasFocus){
-					if (v.getId() == R.id.edit_seatpos_x){
-						seatPosX = Integer.parseInt(xET.getText().toString());
-					}else if(v.getId() == R.id.edit_seatpos_y){
-						seatPosY = Integer.parseInt(yET.getText().toString());
-					}else if(v.getId() == R.id.edit_seatpos_width){
-						seatPosWidth = Integer.parseInt(widthET.getText().toString());
-					}else if(v.getId() == R.id.edit_seatpos_height){
-						seatPosHeight = Integer.parseInt(heightET.getText().toString());
-					}else if(v.getId() == R.id.edit_seatpos_direction){
-						seatPosDirection = Integer.parseInt(directionET.getText().toString());
+					if (v.getId() == R.id.edit_seatpos_x || 
+							v.getId() == R.id.edit_seatpos_y ||
+							v.getId() == R.id.edit_seatpos_width || 
+							v.getId() == R.id.edit_seatpos_height || 
+							v.getId() == R.id.edit_seatpos_direction){
+						updateSeatPositionInfo();
 					}
-					updateMapImage();
 				}		
 			}
 			
@@ -226,8 +174,11 @@ public class EditSeatPositionActivity extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
-				seatPosFloor = (Integer)floorSpinner.getSelectedItem();
-				updateMapImage();
+				int seatPosFloor = (Integer)floorSpinner.getSelectedItem();
+				Bitmap mapImage = getFloorMapImage(seatPosFloor);
+				if(mapImage != null){
+					mapIV.setMap(mapImage);
+				}
 			}
 
 			@Override
@@ -237,73 +188,13 @@ public class EditSeatPositionActivity extends Activity {
 		});
 
 
-		mapIV.setImageMatrix(matrix);
-
-		mapIV.setOnTouchListener(new OnTouchListener() {
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				ImageView view = (ImageView) v;
-				switch (event.getAction() & MotionEvent.ACTION_MASK) {
-				case MotionEvent.ACTION_DOWN:
-					onTouchDown(event);
-					break;
-				case MotionEvent.ACTION_UP:
-					onTouchUp(event);
-					break;
-				case MotionEvent.ACTION_POINTER_UP:
-					onPointerUp(event);
-					break;
-				case MotionEvent.ACTION_POINTER_DOWN:
-					onPointerDown(event);
-					break;
-				case MotionEvent.ACTION_MOVE:
-					onTouchMove(event);
-					break;
-				}
-				view.setImageMatrix(matrix);
-
-				checkScale();
-				center();
-
-				return true;
-			}
-		});
-
-		mapIV.getViewTreeObserver().addOnGlobalLayoutListener(
-				new OnGlobalLayoutListener() {
-
-					@Override
-					public void onGlobalLayout() {
-						if (calculateMapSize) {
-							Rect frame = new Rect();
-							getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
-							int top = getWindow().findViewById(Window.ID_ANDROID_CONTENT).getTop();
-							mapViewHeight = frame.bottom - top ;
-							Resources r = getResources();
-							int titleLayoutHeight = (int) r.getDimension(R.dimen.activity_title_height);
-							
-							mapViewHeight = mapViewHeight - (titleLayoutHeight +floorPanelHeight+infoPanelHeight);
-							mapViewWidth = frame.width();
-							calculateMapSize = false;
-						}
-					}
-				});
 		
 		zoomInBtn = (ImageButton) findViewById(R.id.edit_seatpos_map_zoomin);
 		zoomInBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				float p[] = new float[9];
-				matrix.getValues(p);
-				if ((p[0] * 1.25f) <= MAX_SCALE) {
-					matrix.postScale(1.25f, 1.25f);
-				}
-				center();
-				mapIV.setImageMatrix(matrix);
-
+				mapIV.zoomIn();
 			}
 
 		});
@@ -313,68 +204,17 @@ public class EditSeatPositionActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				float p[] = new float[9];
-				matrix.getValues(p);
-				if ((p[0] * 0.8f) >= MIN_SCALE) {
-					matrix.postScale(0.8f, 0.8f);
-				}
-				center();
-				mapIV.setImageMatrix(matrix);
+				mapIV.zoomOut();
 			}
 
 		});
 
 		locateBtn = (ImageButton) findViewById(R.id.edit_seatpos_map_locate);
-
 		locateBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
-				float p[] = new float[9];
-				matrix.getValues(p);
-				float currentScale = p[0];
-
-				RectF seatRect = new RectF(seatPosX, seatPosY, seatPosX + seatPosWidth, seatPosY + seatPosHeight);
-				RectF mapRect = new RectF(0, 0, bitmapWidth, bitmapHeight);
-
-				Matrix m = new Matrix();
-				m.set(matrix);
-				m.mapRect(seatRect);
-				m.mapRect(mapRect);
-
-				float centerX = seatRect.left + seatRect.width() / 2;
-				float centerY = seatRect.top + seatRect.height() / 2;
-
-				float mapViewCenterX = mapViewWidth / 2;
-				float mapViewCenterY = mapViewHeight / 2;
-
-				float deltaX = 0, deltaY = 0;
-
-				deltaX = mapViewCenterX - centerX;
-				deltaY = mapViewCenterY - centerY;
-
-				Matrix m1 = new Matrix();
-				m1.set(matrix);
-
-				float p3[] = new float[9];
-
-				m1.getValues(p3);
-
-				// m1.setScale(p[0], p[0]);
-				// matrix.setTranslate(deltaX, deltaY);
-				m1.postTranslate(deltaX, deltaY);
-
-				float p2[] = new float[9];
-
-				m1.getValues(p2);
-
-				matrix.set(m1);
-				mapIV.setImageMatrix(matrix);
-				
-				center();
-				mapIV.setImageMatrix(matrix);
+				mapIV.locateSeatPosition();
 			}
 
 		});
@@ -391,18 +231,10 @@ public class EditSeatPositionActivity extends Activity {
 				if(fullscreenBtn.isChecked()){
 					floorPanelLayout.setVisibility(View.GONE);
 					infoPanelLayout.setVisibility(View.GONE);
-					floorPanelHeight = 0;
-					infoPanelHeight = 0;
-					calculateMapSize = true;
 				}else{
 					floorPanelLayout.setVisibility(View.VISIBLE);
 					infoPanelLayout.setVisibility(View.VISIBLE);
-					floorPanelHeight = (int) resources.getDimension(R.dimen.map_floorpanel_height);
-					infoPanelHeight = (int) resources.getDimension(R.dimen.map_infopanel_height);	
-					calculateMapSize = true;
 				}
-				center();
-				mapIV.setImageMatrix(matrix);
 			}
 			
 		});
@@ -412,11 +244,7 @@ public class EditSeatPositionActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				if(penBtn.isChecked()){
-					mode = MODE.PEN;
-				}else{
-					mode = MODE.NONE;
-				}	
+				mapIV.setPenPressed(penBtn.isChecked());	
 			}
 			
 		});
@@ -426,9 +254,7 @@ public class EditSeatPositionActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				seatPosDirection = ((seatPosDirection + 30) % 360 +360) % 360;
-				directionET.setText(Integer.toString(seatPosDirection));
-				updateMapImage();
+				mapIV.Rotate(30);
 			}
 			
 		});
@@ -438,9 +264,7 @@ public class EditSeatPositionActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				seatPosDirection = ((seatPosDirection - 30) % 360 +360) % 360;
-				directionET.setText(Integer.toString(seatPosDirection));
-				updateMapImage();
+				mapIV.Rotate(-30);
 			}
 			
 		});
@@ -450,22 +274,8 @@ public class EditSeatPositionActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				seatPosX = Integer.parseInt(xET.getText().toString());
-				seatPosY = Integer.parseInt(yET.getText().toString());
-				seatPosWidth = Integer.parseInt(widthET.getText().toString());
-				seatPosHeight = Integer.parseInt(heightET.getText().toString());
-				seatPosDirection = Integer.parseInt(directionET.getText().toString());
-				seatPosFloor = (Integer)floorSpinner.getSelectedItem();
 				
-				newSeatInfo = new SeatInfo();
-				
-				newSeatInfo.setInitials(initials);
-				newSeatInfo.setX(seatPosX);
-				newSeatInfo.setY(seatPosY);
-				newSeatInfo.setWidth(seatPosWidth);
-				newSeatInfo.setHeight(seatPosHeight);
-				newSeatInfo.setDirection(seatPosDirection);
-				newSeatInfo.setFloorNo(seatPosFloor);
+				newSeatInfo = getNewSeatInfo();
 				
 				if(dataModified(seatInfo, newSeatInfo)){
 					Dialog dialog = new AlertDialog.Builder(EditSeatPositionActivity.this)
@@ -475,14 +285,12 @@ public class EditSeatPositionActivity extends Activity {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							if(!DataManager.getInstance().updateSeatInfo(initials, newSeatInfo)){
-								Toast.makeText(EditSeatPositionActivity.this, "Update seat info failed!", Toast.LENGTH_SHORT);
-							}
-							
-							dialog.dismiss();	
-							
-							setResult(MainActivity.ACTIVITY_RESULT_EDITSEATINFO_OK);
+								Toast.makeText(EditSeatPositionActivity.this, "Update seat info failed!", Toast.LENGTH_SHORT).show();
+							}else{
+								setResult(MainActivity.ACTIVITY_RESULT_EDITSEATINFO_OK);
+							}							
+							dialog.dismiss();								
 							EditSeatPositionActivity.this.finish();
-							//update main activity layout
 							
 						}
 					})
@@ -501,6 +309,8 @@ public class EditSeatPositionActivity extends Activity {
 			}
 
 			
+
+			
 			
 		});
 		
@@ -516,13 +326,58 @@ public class EditSeatPositionActivity extends Activity {
 	}
 	
 	@Override
+	public void onSeatRectChanged(RectF seatRect) {
+		xET.setText(Integer.toString((int)seatRect.left));
+		yET.setText(Integer.toString((int)seatRect.top));
+		widthET.setText(Integer.toString((int)seatRect.width()));
+		heightET.setText(Integer.toString((int)seatRect.height()));
+	}
+
+	@Override
+	public void onSeatDirectionChanged(int direction) {
+		directionET.setText(Integer.toString(direction));
+	}
+	
+	private SeatInfo getNewSeatInfo() {
+		int seatPosX = Integer.parseInt(xET.getText().toString());
+		int seatPosY = Integer.parseInt(yET.getText().toString());
+		int seatPosWidth = Integer.parseInt(widthET.getText().toString());
+		int seatPosHeight = Integer.parseInt(heightET.getText().toString());
+		int seatPosDirection = Integer.parseInt(directionET.getText().toString());
+		int seatPosFloor = (Integer)floorSpinner.getSelectedItem();
+		
+		SeatInfo result = new SeatInfo();
+		
+		result.setInitials(initials);
+		result.setX(seatPosX);
+		result.setY(seatPosY);
+		result.setWidth(seatPosWidth);
+		result.setHeight(seatPosHeight);
+		result.setDirection(seatPosDirection);
+		result.setFloorNo(seatPosFloor);
+		
+		return result;
+	}
+	
+	private void updateSeatPositionInfo() {
+		int seatPosX = Integer.parseInt(xET.getText().toString());
+		int seatPosY = Integer.parseInt(yET.getText().toString());
+		int seatPosWidth = Integer.parseInt(widthET.getText().toString());
+		int seatPosHeight = Integer.parseInt(heightET.getText().toString());
+		int seatPosDirection = Integer.parseInt(directionET.getText().toString());
+		mapIV.setSeatRect(new RectF(seatPosX, seatPosY, seatPosX + seatPosWidth, seatPosY + seatPosHeight));
+		mapIV.setSeatDirection(seatPosDirection);	
+		mapIV.invalidate();
+	}
+
+	@Override
 	public void onBackPressed() {
-		seatPosX = Integer.parseInt(xET.getText().toString());
-		seatPosY = Integer.parseInt(yET.getText().toString());
-		seatPosWidth = Integer.parseInt(widthET.getText().toString());
-		seatPosHeight = Integer.parseInt(heightET.getText().toString());
-		seatPosDirection = Integer.parseInt(directionET.getText().toString());
-		seatPosFloor = (Integer)floorSpinner.getSelectedItem();
+		int seatPosX = Integer.parseInt(xET.getText().toString());
+		int seatPosY = Integer.parseInt(yET.getText().toString());
+		int seatPosWidth = Integer.parseInt(widthET.getText().toString());
+		int seatPosHeight = Integer.parseInt(heightET.getText().toString());
+		int seatPosDirection = Integer.parseInt(directionET.getText().toString());
+		int seatPosFloor = (Integer)floorSpinner.getSelectedItem();
 		
 		newSeatInfo = new SeatInfo();
 		
@@ -578,22 +433,7 @@ public class EditSeatPositionActivity extends Activity {
 	}
 	
 	private void clickCancelButton(){
-		seatPosX = Integer.parseInt(xET.getText().toString());
-		seatPosY = Integer.parseInt(yET.getText().toString());
-		seatPosWidth = Integer.parseInt(widthET.getText().toString());
-		seatPosHeight = Integer.parseInt(heightET.getText().toString());
-		seatPosDirection = Integer.parseInt(directionET.getText().toString());
-		seatPosFloor = (Integer)floorSpinner.getSelectedItem();
-		
-		newSeatInfo = new SeatInfo();
-		
-		newSeatInfo.setInitials(initials);
-		newSeatInfo.setX(seatPosX);
-		newSeatInfo.setY(seatPosY);
-		newSeatInfo.setWidth(seatPosWidth);
-		newSeatInfo.setHeight(seatPosHeight);
-		newSeatInfo.setDirection(seatPosDirection);
-		newSeatInfo.setFloorNo(seatPosFloor);
+		newSeatInfo = getNewSeatInfo();
 		
 		if(dataModified(seatInfo, newSeatInfo)){
 			Dialog dialog = new AlertDialog.Builder(EditSeatPositionActivity.this)
@@ -619,241 +459,34 @@ public class EditSeatPositionActivity extends Activity {
 			finish();
 		}
 	}
-	
 
-	private void onTouchDown(MotionEvent event) {
-		if(mode != MODE.PEN){
-			savedMatrix.set(matrix);
-			start.set(event.getX(), event.getY());
-			mode = MODE.DRAG;
-		}else{
-			penStartPosX = (int) event.getX();
-			penStartPosY = (int) event.getY();
-			
-			float[] point = new float[]{penStartPosX, penStartPosY};
-			float[] newPoint = new float[]{0, 0};
-			Matrix m = new Matrix();
-			matrix.invert(m);
-			m.mapPoints(newPoint, point);
-			
-			seatPosX = (int) newPoint[0];
-			seatPosY = (int) newPoint[1];
-			
-			seatPosWidth = 0;
-			seatPosHeight = 0;
-			seatPosDirection = 0;
-			updateSeatPosControls();
-			updateMapImage();
-			mapIV.setDrawSeatPos(true);
-			mapIV.setSeatPos(penStartPosX, penStartPosY, seatPosWidth, seatPosHeight);
-			mapIV.invalidate();
-		}
-	}
-
-	
-	private void onTouchUp(MotionEvent event) {
-		if(mode != MODE.PEN){
-			mode = MODE.NONE;
-		}else{
-			
-			int oldx = seatPosX;
-			int oldy = seatPosY;
-			int x = (int) event.getX();
-			int y = (int) event.getY();
-			
-			RectF rect = new RectF(penStartPosX, penStartPosY, x, y);
-			Matrix m = new Matrix();
-			matrix.invert(m);
-			m.mapRect(rect);
-			
-			seatPosX = (int) rect.left;
-			seatPosY = (int) rect.top;
-			seatPosWidth = (int)rect.width();
-			seatPosHeight = (int)rect.height();
-			
-			updateSeatPosControls();
-			updateMapImage();
-			mapIV.setDrawSeatPos(false);
-		}
-	}
-
-	private void onPointerUp(MotionEvent event) {
-		if(mode != MODE.PEN){
-			mode = MODE.NONE;
-		}
-	}
-
-	private void onPointerDown(MotionEvent event) {
-		if(mode != MODE.PEN){
-			if (event.getPointerCount() == 2) {
-				beforeLength = getDistance(event);
-				if (beforeLength > 10f) {
-					savedMatrix.set(matrix);
-					midPoint(mid, event);
-					mode = MODE.ZOOM;
-				}
-			}
-		}
-	}
-
-	private void onTouchMove(MotionEvent event) {
-		if (mode == MODE.DRAG) {
-			matrix.set(savedMatrix);
-			matrix.postTranslate(event.getX() - start.x, event.getY() - start.y);
-		} else if (mode == MODE.ZOOM) {
-			float afterLength = getDistance(event);
-			if (afterLength > 10f) {
-				matrix.set(savedMatrix);
-				float scale = afterLength / beforeLength;
-				matrix.postScale(scale, scale, mid.x, mid.y);
-			}
-		}else if(mode == MODE.PEN){
-			int x = (int) event.getX();
-			int y = (int) event.getY();
-			
-			RectF rect = new RectF(penStartPosX, penStartPosY, x, y);
-			Matrix m = new Matrix();
-			matrix.invert(m);
-			m.mapRect(rect);
-			
-			seatPosX = (int) rect.left;
-			seatPosY = (int) rect.top;
-			seatPosWidth = (int)rect.width();
-			seatPosHeight = (int)rect.height();
-			
-			int drawX = Math.min(penStartPosX, x);
-			int drawY = Math.min(penStartPosY, y);
-			int drawWidth = Math.abs(x - penStartPosX);
-			int drawHeight = Math.abs(y - penStartPosY);
-			
-			
-			updateSeatPosControls();
-			mapIV.setSeatPos(drawX, drawY, drawWidth, drawHeight);
-			mapIV.invalidate();
-			//updateMapImage();
-		}
-	}
-
-	private float getDistance(MotionEvent event) {
-		float x = event.getX(0) - event.getX(1);
-		float y = event.getY(0) - event.getY(1);
-
-		return FloatMath.sqrt(x * x + y * y);
-	}
-
-	private void midPoint(PointF point, MotionEvent event) {
-		float x = event.getX(0) - event.getX(1);
-		float y = event.getY(0) - event.getY(1);
-
-		point.set(x / 2, y / 2);
-	}
-
-	protected void checkScale() {
-		float p[] = new float[9];
-		matrix.getValues(p);
-		if (mode == MODE.ZOOM) {
-			if (p[0] < MIN_SCALE) {
-				matrix.setScale(MIN_SCALE, MIN_SCALE);
-			}
-			if (p[0] > MAX_SCALE) {
-				matrix.set(savedMatrix);
-			}
-		}
-	}
-
-	protected void center() {
-		center(true, true);
-	}
-
-	private void center(boolean horizontal, boolean vertical) {
-		Matrix m = new Matrix();
-		m.set(matrix);
-		RectF rect = new RectF(0, 0, bitmapWidth, bitmapHeight);
-		m.mapRect(rect);
-		float height = rect.height();
-		float width = rect.width();
-
-		float deltaX = 0, deltaY = 0;
-
-		if (vertical) {
-			if (height < mapViewHeight) {
-				deltaY = (mapViewHeight - height) / 2 - rect.top;
-			} else if (rect.top > 0) {
-				deltaY = -rect.top;
-			} else if (rect.bottom < mapViewHeight) {
-				deltaY = mapViewHeight - rect.bottom;
-			}
-		}
-
-		if (horizontal) {
-			if (width < mapViewWidth) {
-				deltaX = (mapViewWidth - width) / 2 - rect.left;
-			} else if (rect.left > 0) {
-				deltaX = -rect.left;
-			} else if (rect.right < mapViewWidth) {
-				deltaX = mapViewWidth - rect.right;
-			}
-		}
-		matrix.postTranslate(deltaX, deltaY);
-
-	}
-
-	private int getStatusBarHeight() {
-		Class<?> c = null;
-		Object obj = null;
-		Field field = null;
-		int x = 0, sbar = 0;
+	private Bitmap getFloorMapImage(int floor) {
+		String mapFilename = DataManager.getInstance().getMapFilenameByFloor(floor);
+		FileInputStream fis = null;
 		try {
-			c = Class.forName("com.android.internal.R$dimen");
-			obj = c.newInstance();
-			field = c.getField("status_bar_height");
-			x = Integer.parseInt(field.get(obj).toString());
-			sbar = getResources().getDimensionPixelSize(x);
-		} catch (Exception e) {
-			Log.e("MapActivity", "get status bar height failed");
-			e.printStackTrace();
+			if (mapFilename != null) {
+				File f = new File(mapFilename);
+
+				if (f.exists() && f.isFile()) {
+					fis = new FileInputStream(f);
+					Bitmap bitmap = BitmapFactory.decodeStream(fis);
+					
+					return bitmap;
+				}
+			}
+		} catch (Exception exp) {
+			exp.printStackTrace();
+		} finally {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (IOException e) {
+				}
+			}
 		}
-		return sbar;
+		
+		return null;
 	}
-	
-	private void updateSeatPosControls() {
-		xET.setText(Integer.toString(seatPosX));
-		yET.setText(Integer.toString(seatPosY));
-		widthET.setText(Integer.toString(seatPosWidth));
-		heightET.setText(Integer.toString(seatPosHeight));
-		directionET.setText(Integer.toString(seatPosDirection));
-	}
-	
 
 	
-	private void updateMapImage() {
-		
-		CompositedImageGetter imageGetter = new CompositedImageGetter(new RealSizeImageGetter());
-		
-		imageGetter.addFilter(new SeatPositionImageFilter(seatPosX, seatPosY, seatPosWidth, seatPosHeight, seatPosDirection));
-		
-		ImageLoader imageLoader = new ImageLoader(imageGetter);
-		
-		String mapFilename = DataManager.getInstance().getMapFilenameByFloor(seatPosFloor);
-		
-		if(mapFilename != null){
-			ImageLoader.OnImageLoadListener listener = new ImageLoader.OnImageLoadListener() {
-				
-				@Override
-				public void onImageLoaded(Bitmap bitmap, Object[] parameters) {
-					// TODO Auto-generated method stub
-					mapImage = bitmap;
-					mapIV.setImageBitmap(bitmap);
-					bitmapWidth = bitmap.getWidth();
-					bitmapHeight = bitmap.getHeight();
-				}
-				
-				@Override
-				public void onError(Object[] parameters) {
-				}
-			};
-			imageLoader.loadImage(new Object[]{mapFilename}, listener);
-		}
-			
-	}
 }
