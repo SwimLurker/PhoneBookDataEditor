@@ -132,7 +132,7 @@ public class MainActivity extends Activity {
 
 			if (i == 0) {
 				imageViews[i]
-						.setBackgroundResource(R.drawable.page_indicator_focused);
+						.setBackgroundResource(R.drawable.page_indicator_focused_1);
 			} else {
 				imageViews[i].setBackgroundResource(R.drawable.page_indicator);
 			}
@@ -793,9 +793,11 @@ public class MainActivity extends Activity {
 		public void onPageSelected(int index) {
 
 			for (int i = 0; i < imageViews.length; i++) {
-				imageViews[index]
-						.setBackgroundResource(R.drawable.page_indicator_focused);
-
+				if(index == 0){
+					imageViews[index].setBackgroundResource(R.drawable.page_indicator_focused_1);
+				}else{
+					imageViews[index].setBackgroundResource(R.drawable.page_indicator_focused_2);
+				}
 				if (index != i) {
 					imageViews[i]
 							.setBackgroundResource(R.drawable.page_indicator);

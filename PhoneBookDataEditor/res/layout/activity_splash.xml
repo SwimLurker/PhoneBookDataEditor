@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
@@ -10,5 +10,26 @@
         android:layout_height="fill_parent"
         android:background="@drawable/splash"
         />
-
-</LinearLayout>
+	<TextView 
+	    android:id="@+id/splash_title"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true" 
+	    android:layout_centerHorizontal="true"
+	    android:text="@string/app_name"
+	    android:textColor="#970722"
+	    android:textSize="@dimen/splash_titletext_size"
+	    android:textStyle="bold"
+	    android:paddingBottom="@dimen/splash_titletext_bottompadding" />
+	<TextView 
+	    android:id="@+id/splash_titlecompany"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true" 
+	    android:layout_centerHorizontal="true"
+	    android:text="@string/company"
+	    android:textColor="#970722"
+	    android:textSize="@dimen/splash_companytext_size"
+	    android:textStyle="normal"
+	    android:paddingBottom="@dimen/splash_companytext_bottompadding" />
+</RelativeLayout>

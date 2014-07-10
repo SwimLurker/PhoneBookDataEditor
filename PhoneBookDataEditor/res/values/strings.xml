@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">PhoneBook Data Editor</string>
+    <string name="company">NNIT(Tianjin) Technology Co. Ltd.</string>
     <string name="maintitle"> Data Editor</string>
 	<string name="menuitem_open"> Open File...</string>
 	<string name="menuitem_save"> Save to File...</string>

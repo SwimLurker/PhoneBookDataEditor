@@ -14,5 +14,9 @@
 	<dimen name="map_height_thumbnail_big">128dp</dimen>
 	<dimen name="map_floorpanel_height">50dp</dimen>
 	<dimen name="map_infopanel_height">150dp</dimen>
+	<dimen name="splash_titletext_size">20sp</dimen>
+	<dimen name="splash_companytext_size">10sp</dimen>
+	<dimen name="splash_titletext_bottompadding">100dp</dimen>
+	<dimen name="splash_companytext_bottompadding">80dp</dimen>
 	
 </resources>
