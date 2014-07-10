@@ -1,7 +1,5 @@
 package com.nnit.phonebook.dataeditor.ui;
 
-import com.nnit.phonebook.dataeditor.data.SeatInfo;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,12 +7,12 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
-public class SeatPositionImageFilter implements IImageFilter {
+public class SeatPositionImageDecorator implements IImageDecorator {
 
 	private int x, y, w, h, d;
 	
 
-	public SeatPositionImageFilter(int x, int y, int width, int height, int direction) {
+	public SeatPositionImageDecorator(int x, int y, int width, int height, int direction) {
 		super();
 		this.x = x;
 		this.y = y;
@@ -24,7 +22,7 @@ public class SeatPositionImageFilter implements IImageFilter {
 	}
 
 	@Override
-	public Bitmap getImage(Bitmap mapImage) {
+	public Bitmap decorateImage(Bitmap mapImage) {
 		Bitmap seatBmp = null;
 
 		int bitmapWidth = mapImage.getWidth();

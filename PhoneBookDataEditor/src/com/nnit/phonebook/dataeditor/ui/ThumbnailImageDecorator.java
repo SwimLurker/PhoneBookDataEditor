@@ -3,18 +3,18 @@ package com.nnit.phonebook.dataeditor.ui;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 
-public class ThumbnailImageFilter implements IImageFilter{
+public class ThumbnailImageDecorator implements IImageDecorator{
 
 	private int thumbnailWidth, thumbnailHeight;
 	
-	public ThumbnailImageFilter(int thumbnailWidth, int thumbnailHeight) {
+	public ThumbnailImageDecorator(int thumbnailWidth, int thumbnailHeight) {
 		super();
 		this.thumbnailWidth = thumbnailWidth;
 		this.thumbnailHeight = thumbnailHeight;
 	}
 
 	@Override
-	public Bitmap getImage(Bitmap originalImage) {
+	public Bitmap decorateImage(Bitmap originalImage) {
 		return ThumbnailUtils.extractThumbnail(originalImage, thumbnailWidth, thumbnailHeight);
 	}
 

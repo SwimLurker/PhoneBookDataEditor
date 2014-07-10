@@ -12,8 +12,8 @@ import com.nnit.phonebook.dataeditor.data.PhoneBookItem;
 import com.nnit.phonebook.dataeditor.data.PhoneBookItem.GENDER;
 import com.nnit.phonebook.dataeditor.data.SeatInfo;
 import com.nnit.phonebook.dataeditor.ui.ImageLoader;
-import com.nnit.phonebook.dataeditor.ui.SeatPositionImageFilter;
-import com.nnit.phonebook.dataeditor.ui.ThumbnailImageFilter;
+import com.nnit.phonebook.dataeditor.ui.SeatPositionImageDecorator;
+import com.nnit.phonebook.dataeditor.ui.ThumbnailImageDecorator;
 import com.nnit.phonebook.dataeditor.util.BitmapUtil;
 import com.nnit.phonebook.dataeditor.ui.RealSizeImageGetter;
 import com.nnit.phonebook.dataeditor.ui.CompositedImageGetter;
@@ -106,9 +106,9 @@ public class EditPhoneBookActivity extends Activity{
 		
 		CompositedImageGetter imageGetter = new CompositedImageGetter(new RealSizeImageGetter());
 		if(seatInfo != null){
-			imageGetter.addFilter(new SeatPositionImageFilter(seatInfo.getX(), seatInfo.getY(), seatInfo.getWidth(), seatInfo.getHeight(), seatInfo.getDirection()));
+			imageGetter.addDecorator(new SeatPositionImageDecorator(seatInfo.getX(), seatInfo.getY(), seatInfo.getWidth(), seatInfo.getHeight(), seatInfo.getDirection()));
 		}
-		imageGetter.addFilter(new ThumbnailImageFilter(width, height));
+		imageGetter.addDecorator(new ThumbnailImageDecorator(width, height));
 		
 		
 		TextView tv = (TextView)findViewById(R.id.textview_editphonebook_title);
@@ -530,12 +530,12 @@ public class EditPhoneBookActivity extends Activity{
 		CompositedImageGetter imageGetter = new CompositedImageGetter(new RealSizeImageGetter());
 		
 		if(seatInfo != null){
-			imageGetter.addFilter(new SeatPositionImageFilter(seatInfo.getX(), seatInfo.getY(), seatInfo.getWidth(), seatInfo.getHeight(), seatInfo.getDirection()));
+			imageGetter.addDecorator(new SeatPositionImageDecorator(seatInfo.getX(), seatInfo.getY(), seatInfo.getWidth(), seatInfo.getHeight(), seatInfo.getDirection()));
 		}
 		
 		int width = (int)resources.getDimension(R.dimen.map_width_thumbnail_small);
 		int height = (int)resources.getDimension(R.dimen.map_height_thumbnail_small);
-		imageGetter.addFilter(new ThumbnailImageFilter(width, height));
+		imageGetter.addDecorator(new ThumbnailImageDecorator(width, height));
 		
 		ImageLoader imageLoader = new ImageLoader(imageGetter);
 		

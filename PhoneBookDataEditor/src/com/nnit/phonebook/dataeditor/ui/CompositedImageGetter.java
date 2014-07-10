@@ -7,12 +7,12 @@ import android.graphics.Bitmap;
 
 public class CompositedImageGetter implements IImageGetter{
 	
-	private List<IImageFilter> filters = null;
+	private List<IImageDecorator> decorators = null;
 	private IImageGetter originalImageGetter = null;
 	
 	public CompositedImageGetter(IImageGetter originalImageGetter) {
 		super();
-		this.filters = new ArrayList<IImageFilter>();
+		this.decorators = new ArrayList<IImageDecorator>();
 		this.originalImageGetter = originalImageGetter;
 	}
 	
@@ -24,8 +24,8 @@ public class CompositedImageGetter implements IImageGetter{
 		this.originalImageGetter = originalImageGetter;
 	}
 
-	public void addFilter(IImageFilter filter){
-		filters.add(filter);
+	public void addDecorator(IImageDecorator decorator){
+		decorators.add(decorator);
 	}
 
 	@Override
@@ -33,8 +33,8 @@ public class CompositedImageGetter implements IImageGetter{
 		
 		Bitmap seatImage = originalImageGetter.getBitmap(parameters);
 		
-		for(IImageFilter filter: filters){
-			seatImage = filter.getImage(seatImage);
+		for(IImageDecorator decorator: decorators){
+			seatImage = decorator.decorateImage(seatImage);
 		}
 		return seatImage;
 	}
