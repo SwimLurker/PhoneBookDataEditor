@@ -459,6 +459,7 @@ public class MainActivity extends Activity {
 										}
 										dialog.dismiss();
 										MainActivity.this.finish();
+										android.os.Process.killProcess(android.os.Process.myPid());
 									}
 								})
 						.setNegativeButton("Cancel",
@@ -469,11 +470,13 @@ public class MainActivity extends Activity {
 											int which) {
 										dialog.dismiss();
 										MainActivity.this.finish();
+										android.os.Process.killProcess(android.os.Process.myPid());
 									}
 								}).show();
 	
 			} else {
 				super.onBackPressed();
+				android.os.Process.killProcess(android.os.Process.myPid());
 			}
 		}
 	}

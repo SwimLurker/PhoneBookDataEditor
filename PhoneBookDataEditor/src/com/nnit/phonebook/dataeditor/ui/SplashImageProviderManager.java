@@ -25,7 +25,9 @@ public class SplashImageProviderManager {
 	public ISplashImageProvider getSplashImageProvider(String providerName){
 		if(providerName.equalsIgnoreCase(RANDOM_PROVIDER)){
 			return new RandomSplashImageProvider(context.getResources(), 
-					new int[]{R.drawable.splash, R.drawable.splash1, R.drawable.splash2, R.drawable.splash3, R.drawable.splash4});
+					new int[]{R.drawable.splash, R.drawable.splash1, R.drawable.splash2, 
+							R.drawable.splash3, R.drawable.splash4, R.drawable.splash5, 
+							R.drawable.splash6, R.drawable.splash7, R.drawable.splash8});
 		}else if(providerName.equalsIgnoreCase(ONLINE_PROVIDER)){
 			return new OnlineSplashImageProvider(context, OnlineSplashImageProvider.ONLINE_SERVICE_PROVIDER_INSTAGRAM);
 		}else{
