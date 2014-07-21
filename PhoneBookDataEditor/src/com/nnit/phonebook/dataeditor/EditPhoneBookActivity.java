@@ -111,8 +111,8 @@ public class EditPhoneBookActivity extends Activity{
 		imageGetter.addDecorator(new ThumbnailImageDecorator(width, height));
 		
 		
-		TextView tv = (TextView)findViewById(R.id.textview_editphonebook_title);
-		tv.setText("Edit PhoneBook Item");
+		//TextView tv = (TextView)findViewById(R.id.textview_editphonebook_title);
+		//tv.setText(resources.getString(R.string.title_edit_phonebook));
 		
 		String initials = pbItem.getInitials();
 		photoIV = (ImageView) findViewById(R.id.edit_phonebook_photo);
@@ -286,16 +286,16 @@ public class EditPhoneBookActivity extends Activity{
 				if(dataModified(pbItem, newPbItem) || newPhoto!=null){
 					Dialog dialog = new AlertDialog.Builder(EditPhoneBookActivity.this)
 		        	.setIcon(R.drawable.ic_launcher)
-		        	.setTitle("Data has been modified,do you want to apply the modification?")
-		        	.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+		        	.setTitle(resources.getString(R.string.info_save_modification))
+		        	.setPositiveButton(resources.getString(R.string.lable_okbtn),new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							if(!DataManager.getInstance().updatePhoneBook(pbItem.getInitials(), newPbItem)){
-								Toast.makeText(EditPhoneBookActivity.this, "Update phonebook info failed!", Toast.LENGTH_SHORT);
+								Toast.makeText(EditPhoneBookActivity.this, resources.getString(R.string.error_update_phonebook), Toast.LENGTH_SHORT).show();
 							}
 							
 							if(!DataManager.getInstance().updatePhoneBookPhoto(pbItem.getInitials(), newPhoto)){
-								Toast.makeText(EditPhoneBookActivity.this, "Update phonebook photo failed!", Toast.LENGTH_SHORT);
+								Toast.makeText(EditPhoneBookActivity.this, resources.getString(R.string.error_update_phonebook_photo), Toast.LENGTH_SHORT).show();
 							}
 							dialog.dismiss();	
 							
@@ -305,7 +305,7 @@ public class EditPhoneBookActivity extends Activity{
 							
 						}
 					})
-		        	.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		        	.setNegativeButton(resources.getString(R.string.lable_cancelbtn), new DialogInterface.OnClickListener() {
 						
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -414,15 +414,15 @@ public class EditPhoneBookActivity extends Activity{
 		if(dataModified(pbItem, newPbItem)|| newPhoto!=null){
 			Dialog dialog = new AlertDialog.Builder(EditPhoneBookActivity.this)
         	.setIcon(R.drawable.ic_launcher)
-        	.setTitle("Data has been modified,do you want to cancel the modification?")
-        	.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+        	.setTitle(resources.getString(R.string.info_cancel_modification))
+        	.setPositiveButton(resources.getString(R.string.lable_okbtn),new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					dialog.dismiss();		
 					EditPhoneBookActivity.this.finish();
 				}
 			})
-        	.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        	.setNegativeButton(R.string.lable_cancelbtn, new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -485,9 +485,9 @@ public class EditPhoneBookActivity extends Activity{
 	}
 	
 	private void pickupPhoto(){
-		CharSequence[] items = {"Camera", "Photo Album"};
+		CharSequence[] items = {resources.getString(R.string.lable_camera), resources.getString(R.string.lable_photoalbum)};
 		new AlertDialog.Builder(EditPhoneBookActivity.this)
-			.setTitle("Pick Photo From")
+			.setTitle(resources.getString(R.string.title_pickphoto))
 			.setItems(items, new DialogInterface.OnClickListener(){
 
 				@Override
@@ -504,7 +504,7 @@ public class EditPhoneBookActivity extends Activity{
 							Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 							intent.addCategory(Intent.CATEGORY_OPENABLE);
 							intent.setType("image/*");
-							startActivityForResult(Intent.createChooser(intent, "Please select photo"), PICKPHOTO_BY_ALBUM);
+							startActivityForResult(Intent.createChooser(intent, resources.getString(R.string.title_pickphoto_by_album)), PICKPHOTO_BY_ALBUM);
 							//startActivityForResult(intent, PICKPHOTO_BY_ALBUM);
 						}catch (ActivityNotFoundException e){
 							e.printStackTrace();

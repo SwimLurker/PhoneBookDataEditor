@@ -33,7 +33,6 @@ public class OpenFileDialog {
 	public static final String sParent = "..";
 	public static final String sFolder = ".";
 	public static final String sEmpty = "";
-	public static final String sOnErrorMsg = "No rights to access!";
 	
 	public static Dialog createDialog(int id, 
 			Context context, 
@@ -42,7 +41,7 @@ public class OpenFileDialog {
 			String suffixs,
 			Map<String, Integer> images){
 		
-		AlertDialog.Builder builder = new AlertDialog.Builder(context).setNegativeButton("Cancel", null);
+		AlertDialog.Builder builder = new AlertDialog.Builder(context).setNegativeButton(context.getString(R.string.lable_cancelbtn), null);
 		Set<String> suffixSet = new HashSet<String>();
 		StringTokenizer st = new StringTokenizer(suffixs, "|");
 		while(st.hasMoreTokens()){
@@ -68,7 +67,7 @@ public class OpenFileDialog {
 		private int dialogID = 0;
 		private Set<String> suffixs = null;
 		private Map<String, Integer> imageMap = null;
-		
+				
 		public FileSelectView(Context context, 
 				int dialogID, 
 				CallbackBundle callback,
@@ -113,7 +112,7 @@ public class OpenFileDialog {
 			}
 			
 			if(files == null){
-				Toast.makeText(getContext(), sOnErrorMsg, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getContext(), getContext().getString(R.string.error_no_right_to_access), Toast.LENGTH_SHORT).show();
 				return -1;
 			}
 			

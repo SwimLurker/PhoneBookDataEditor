@@ -14,6 +14,7 @@ import java.util.Set;
 
 
 
+
 import com.nnit.phonebook.dataeditor.R;
 import com.nnit.phonebook.dataeditor.data.DataManager;
 import com.nnit.phonebook.dataeditor.data.DepartmentInfo;
@@ -31,6 +32,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -99,10 +101,14 @@ public class MainActivity extends Activity {
 	
 	
 	private int viewState = VIEW_STATE_PHONEBOOKLIST;
+	
+	private Resources resources = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		resources = getResources();
 		// requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -110,8 +116,7 @@ public class MainActivity extends Activity {
 
 		pageViews = new ArrayList<View>();
 
-		View phoneBookPageView = inflater.inflate(
-				R.layout.pageview_phonebooklist, null);
+		View phoneBookPageView = inflater.inflate(R.layout.pageview_phonebooklist, null);
 
 		View mapPageView = inflater.inflate(R.layout.pageview_maplist, null);
 		
@@ -147,7 +152,7 @@ public class MainActivity extends Activity {
 			showDialog(R.layout.dialog_datapackageselect);
 		} else {
 			if (!DataManager.getInstance().loadDataPackage()) {
-				Toast.makeText(MainActivity.this, "Invalid Data Package!",
+				Toast.makeText(MainActivity.this, resources.getString(R.string.error_invalid_datapackage),
 						Toast.LENGTH_SHORT).show();
 			}
 		}
@@ -173,8 +178,7 @@ public class MainActivity extends Activity {
 			public void onClick(View arg0) {
 				Intent intent = new Intent();
 				intent.setAction("com.nnit.phonebook.dataeditor.NewPhoneBookActivity");
-				startActivityForResult(intent,
-						ACTIVITY_REQUEST_CODE_NEWPHONEBOOK_ACTIVITY);	
+				startActivityForResult(intent, ACTIVITY_REQUEST_CODE_NEWPHONEBOOK_ACTIVITY);	
 			}
 
 		});
@@ -190,8 +194,8 @@ public class MainActivity extends Activity {
 		});
 
 		// title bar for select phone book list
-		TextView tvEditListTitle = (TextView) findViewById(R.id.textview_selectphonebooklist_title);
-		tvEditListTitle.setText("");
+		//TextView tvEditListTitle = (TextView) findViewById(R.id.textview_selectphonebooklist_title);
+		
 
 		ImageButton selectAllBtn = (ImageButton) findViewById(R.id.imagebtn_selectphonebooklist_selectall);
 		selectAllBtn.setOnClickListener(new OnClickListener() {
@@ -222,27 +226,22 @@ public class MainActivity extends Activity {
 			public void onClick(View arg0) {
 				Dialog dialog = new AlertDialog.Builder(MainActivity.this)
 						.setIcon(R.drawable.ic_launcher)
-						.setTitle("Do you want to delete selected data?")
-						.setPositiveButton("OK",
+						.setTitle(resources.getString(R.string.info_delete_phonebook))
+						.setPositiveButton(resources.getString(R.string.lable_okbtn),
 								new DialogInterface.OnClickListener() {
 									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
-										Set<String> initials = pbListAdapter
-												.getDeletedInitals();
-										DataManager.getInstance()
-												.setPhoneBookDataDeleted(
-														initials);
+									public void onClick(DialogInterface dialog,	int which) {
+										Set<String> initials = pbListAdapter.getDeletedInitals();
+										DataManager.getInstance().setPhoneBookDataDeleted(initials);
 										updatePhoneBookList(DataManager.getInstance().getPhoneBookItemList(filters),true);
 										dialog.dismiss();
 									}
 								})
-						.setNegativeButton("Cancel",
+						.setNegativeButton(resources.getString(R.string.lable_cancelbtn),
 								new DialogInterface.OnClickListener() {
 
 									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
+									public void onClick(DialogInterface dialog,	int which) {
 										dialog.dismiss();
 									}
 								}).show();
@@ -262,16 +261,14 @@ public class MainActivity extends Activity {
 
 		// phonebook list
 		
-		pbListView = (ListView) phoneBookPageView
-				.findViewById(R.id.phonebook_list);
+		pbListView = (ListView) phoneBookPageView.findViewById(R.id.phonebook_list);
 
 		updatePhoneBookList(DataManager.getInstance().getPhoneBookItemList(filters), false);
 
 		pbListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				enterPhoneBookListEditMode(position);
 				return true;
 			}
@@ -285,11 +282,9 @@ public class MainActivity extends Activity {
 					int position, long id) {
 				if (!pbListAdapter.isEditMode()) {
 					Intent intent = new Intent();
-					intent.putExtra(SELECTED_PBITEM,
-							(PhoneBookItem) pbListAdapter.getItem(position));
+					intent.putExtra(SELECTED_PBITEM,(PhoneBookItem) pbListAdapter.getItem(position));
 					intent.setAction("com.nnit.phonebook.dataeditor.EditPhoneBookActivity");
-					startActivityForResult(intent,
-							ACTIVITY_REQUEST_CODE_EDITPHONEBOOK_ACTIVITY);
+					startActivityForResult(intent, ACTIVITY_REQUEST_CODE_EDITPHONEBOOK_ACTIVITY);
 				} else {
 					// pbListAdapter.setCheckedState(position,
 					// !pbListAdapter.getCheckedState(position));
@@ -308,8 +303,7 @@ public class MainActivity extends Activity {
 		mapListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
 				enterMapListEditMode(position);
 				return true;
@@ -317,8 +311,8 @@ public class MainActivity extends Activity {
 
 		});
 		// title bar map list
-		TextView tvMapTitle = (TextView) findViewById(R.id.textview_maplist_title);
-		tvMapTitle.setText("Seat Map List");
+		//TextView tvMapTitle = (TextView) findViewById(R.id.textview_maplist_title);
+		//tvMapTitle.setText(resources.getString(R.string.title_seatmap_list));
 
 		ImageButton newMapBtn = (ImageButton) findViewById(R.id.imagebtn_maplist_new);
 		newMapBtn.setOnClickListener(new OnClickListener() {
@@ -327,8 +321,7 @@ public class MainActivity extends Activity {
 			public void onClick(View arg0) {
 				Intent intent = new Intent();
 				intent.setAction("com.nnit.phonebook.dataeditor.NewMapActivity");
-				startActivityForResult(intent,
-						ACTIVITY_REQUEST_CODE_NEWMAP_ACTIVITY);	
+				startActivityForResult(intent, ACTIVITY_REQUEST_CODE_NEWMAP_ACTIVITY);	
 			}
 
 		});
@@ -365,26 +358,22 @@ public class MainActivity extends Activity {
 			public void onClick(View arg0) {
 				Dialog dialog = new AlertDialog.Builder(MainActivity.this)
 						.setIcon(R.drawable.ic_launcher)
-						.setTitle("Do you want to delete selected maps?")
-						.setPositiveButton("OK",
+						.setTitle(resources.getString(R.string.info_delete_map))
+						.setPositiveButton(resources.getString(R.string.lable_okbtn),
 								new DialogInterface.OnClickListener() {
 									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
+									public void onClick(DialogInterface dialog,	int which) {
 										Set<Integer> floors =  mapListAdapter.getDeletedMaps();
-										DataManager.getInstance()
-												.setMapDataDeleted(
-														floors);
+										DataManager.getInstance().setMapDataDeleted(floors);
 										updateMapList(DataManager.getInstance().getMapItemList(),true);
 										dialog.dismiss();
 									}
 								})
-						.setNegativeButton("Cancel",
+						.setNegativeButton(resources.getString(R.string.lable_cancelbtn),
 								new DialogInterface.OnClickListener() {
 
 									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
+									public void onClick(DialogInterface dialog,	int which) {
 										dialog.dismiss();
 									}
 								}).show();
@@ -447,27 +436,24 @@ public class MainActivity extends Activity {
 			if (DataManager.getInstance().isDataModified()) {
 				Dialog dialog = new AlertDialog.Builder(MainActivity.this)
 						.setIcon(R.drawable.ic_launcher)
-						.setTitle(
-								"Data has been modified,do you want to save the modification?")
-						.setPositiveButton("OK",
+						.setTitle(resources.getString(R.string.info_save_modification))
+						.setPositiveButton(resources.getString(R.string.lable_okbtn),
 								new DialogInterface.OnClickListener() {
 									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
+									public void onClick(DialogInterface dialog,	int which) {
 										if(!DataManager.getInstance().saveModification()){
-											Toast.makeText(MainActivity.this, "Save modification failed", Toast.LENGTH_SHORT).show();
+											Toast.makeText(MainActivity.this, resources.getString(R.string.error_save_modification), Toast.LENGTH_SHORT).show();
 										}
 										dialog.dismiss();
 										MainActivity.this.finish();
 										android.os.Process.killProcess(android.os.Process.myPid());
 									}
 								})
-						.setNegativeButton("Cancel",
+						.setNegativeButton(resources.getString(R.string.lable_cancelbtn),
 								new DialogInterface.OnClickListener() {
 	
 									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
+									public void onClick(DialogInterface dialog,	int which) {
 										dialog.dismiss();
 										MainActivity.this.finish();
 										android.os.Process.killProcess(android.os.Process.myPid());
@@ -536,15 +522,14 @@ public class MainActivity extends Activity {
 		case R.id.menuitem_save:
 			Dialog dialog = new AlertDialog.Builder(MainActivity.this)
 					.setIcon(R.drawable.ic_launcher)
-					.setTitle("Do you want to save the data package to disk?")
-					.setPositiveButton("OK",
+					.setTitle(resources.getString(R.string.info_save_to_disk))
+					.setPositiveButton(resources.getString(R.string.lable_okbtn),
 							new DialogInterface.OnClickListener() {
 								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
+								public void onClick(DialogInterface dialog,	int which) {
 									if (DataManager.getInstance().isDataModified()) {
 										if(!DataManager.getInstance().saveModification()){
-											Toast.makeText(MainActivity.this, "Save modification failed", Toast.LENGTH_SHORT).show();
+											Toast.makeText(MainActivity.this, resources.getString(R.string.error_save_modification), Toast.LENGTH_SHORT).show();
 											return;
 										}
 									}
@@ -552,7 +537,7 @@ public class MainActivity extends Activity {
 
 								}
 							})
-					.setNegativeButton("Cancel",
+					.setNegativeButton(resources.getString(R.string.lable_cancelbtn),
 							new DialogInterface.OnClickListener() {
 
 								@Override
@@ -582,17 +567,15 @@ public class MainActivity extends Activity {
 			images.put("zip", R.drawable.filedialog_zipfile);
 
 			Dialog dialog = OpenFileDialog.createDialog(id, this,
-					"Select Data Package File",
+					resources.getString(R.string.title_select_package),
 					new OpenFileDialog.CallbackBundle() {
 						@Override
 						public void callback(Bundle bundle) {
 
 							String fullFileName = bundle.getString("path");
-							if (!DataManager.getInstance().loadDataPackage(
-									fullFileName)) {
-								Toast.makeText(MainActivity.this,
-										"Invalid Data Package!",
-										Toast.LENGTH_SHORT);
+							if (!DataManager.getInstance().loadDataPackage(fullFileName)) {
+								Toast.makeText(MainActivity.this,resources.getString(R.string.error_invalid_datapackage),
+										Toast.LENGTH_SHORT).show();
 							} else {
 								filters = null;
 								updatePhoneBookList(DataManager.getInstance().getPhoneBookItemList(filters), false);
@@ -611,8 +594,7 @@ public class MainActivity extends Activity {
 			images.put(OpenFileDialog.sEmpty, R.drawable.filedialog_file);
 			images.put("zip", R.drawable.filedialog_zipfile);
 
-			Dialog dialog = OpenFileDialog.createDialog(id, this,
-					"Select Save File", new OpenFileDialog.CallbackBundle() {
+			Dialog dialog = OpenFileDialog.createDialog(id, this, resources.getString(R.string.title_select_saveto), new OpenFileDialog.CallbackBundle() {
 						@Override
 						public void callback(Bundle bundle) {
 
@@ -620,12 +602,10 @@ public class MainActivity extends Activity {
 
 							if (DataManager.getInstance().savePackageToDisk(
 									fullFileName)) {
-								Toast.makeText(MainActivity.this,
-										"Save Data Package to " + fullFileName,
+								Toast.makeText(MainActivity.this, resources.getString(R.string.info_saveto)	+ fullFileName,
 										Toast.LENGTH_SHORT).show();
 							} else {
-								Toast.makeText(MainActivity.this,
-										"Save Data Package failed",
+								Toast.makeText(MainActivity.this, resources.getString(R.string.error_save_to_disk),
 										Toast.LENGTH_SHORT).show();
 							}
 
@@ -644,7 +624,7 @@ public class MainActivity extends Activity {
     	List<DepartmentInfo> departments = DataManager.getInstance().getAllDepartments();
     	
     	List<String> depNameList = new ArrayList<String>();
-		depNameList.add(0, "Please Select ...");
+		depNameList.add(0, resources.getString(R.string.lable_spinner_select));
 		for(DepartmentInfo di: departments){
 			depNameList.add(di.getDepartmentName());
 		}
@@ -658,9 +638,9 @@ public class MainActivity extends Activity {
     	
     	Dialog dialog = new AlertDialog.Builder(this)
         	.setIcon(R.drawable.ic_launcher)
-        	.setTitle("Please input search criteria:")
+        	.setTitle(resources.getString(R.string.title_search))
         	.setView(dialogView)
-        	.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+        	.setPositiveButton(resources.getString(R.string.lable_okbtn),new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
@@ -688,7 +668,7 @@ public class MainActivity extends Activity {
 					updatePhoneBookList(DataManager.getInstance().getPhoneBookItemList(filters), false);
 				}
 			})
-        	.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        	.setNegativeButton(resources.getString(R.string.lable_cancelbtn), new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -703,9 +683,9 @@ public class MainActivity extends Activity {
     	final View dialogView = inflater.inflate(R.layout.dialog_about, null);
     	Dialog dialog = new AlertDialog.Builder(this)
         	.setIcon(R.drawable.ic_launcher)
-        	.setTitle("About")
+        	.setTitle(resources.getString(R.string.title_about))
         	.setView(dialogView)
-        	.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+        	.setNegativeButton(resources.getString(R.string.lable_closebtn), new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -802,8 +782,7 @@ public class MainActivity extends Activity {
 					imageViews[index].setBackgroundResource(R.drawable.page_indicator_focused_2);
 				}
 				if (index != i) {
-					imageViews[i]
-							.setBackgroundResource(R.drawable.page_indicator);
+					imageViews[i].setBackgroundResource(R.drawable.page_indicator);
 				}
 			}
 			if(index == 0){

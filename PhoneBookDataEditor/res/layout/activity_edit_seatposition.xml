@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="Floor Number:"
+                android:text="@string/edit_seat_floor"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp" />
 
@@ -149,7 +149,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="X:"
+                        android:text="@string/edit_seat_x"
                         android:textColor="#FFFFFF"
                         android:textSize="12sp" />
 
@@ -170,7 +170,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="Width:"
+                        android:text="@string/edit_seat_width"
                         android:textColor="#FFFFFF"
                         android:textSize="12sp" />
 
@@ -191,7 +191,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="Direction:"
+                        android:text="@string/edit_seat_direction"
                         android:textColor="#FFFFFF"
                         android:textSize="12sp" />
 
@@ -224,7 +224,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="Y:"
+                        android:text="@string/edit_seat_y"
                         android:textColor="#FFFFFF"
                         android:textSize="12sp" />
 
@@ -245,7 +245,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="Height:"
+                        android:text="@string/edit_seat_height"
                         android:textColor="#FFFFFF"
                         android:textSize="12sp" />
 

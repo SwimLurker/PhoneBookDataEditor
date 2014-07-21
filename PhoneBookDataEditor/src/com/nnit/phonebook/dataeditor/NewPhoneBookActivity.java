@@ -22,6 +22,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -72,12 +73,14 @@ public class NewPhoneBookActivity extends Activity{
 	private ImageView photoIV;
 	private ImageButton photoBtn;
 	
-	
+	private Resources resources = null;
 	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		resources = getResources();
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
@@ -87,8 +90,8 @@ public class NewPhoneBookActivity extends Activity{
 		
 		inflater = LayoutInflater.from(this);
 		
-		TextView tv = (TextView)findViewById(R.id.textview_newphonebook_title);
-		tv.setText("New PhoneBook Item");
+		//TextView tv = (TextView)findViewById(R.id.textview_newphonebook_title);
+		//tv.setText(resources.getString(R.string.title_newphonebook));
 		
 		photoIV = (ImageView) findViewById(R.id.new_phonebook_photo);
 		
@@ -119,8 +122,8 @@ public class NewPhoneBookActivity extends Activity{
 		List <DepartmentInfo> departments = DataManager.getInstance().getAllDepartments();
 		List<String> depNoList = new ArrayList<String>();
 		List<String> depNameList = new ArrayList<String>();
-		depNoList.add("Please select ...");
-		depNameList.add("Please select ...");
+		depNoList.add(resources.getString(R.string.lable_spinner_select));
+		depNameList.add(resources.getString(R.string.lable_spinner_select));
 		
 		for(DepartmentInfo di: departments){
 			depNoList.add(di.getDepartmentNO());
@@ -198,38 +201,38 @@ public class NewPhoneBookActivity extends Activity{
 			public void onClick(View v) {
 				String initials = initialsET.getText().toString().toUpperCase();
 				if(initials.equals("")){
-					Toast.makeText(NewPhoneBookActivity.this, "Please input initials", Toast.LENGTH_SHORT).show();
+					Toast.makeText(NewPhoneBookActivity.this, resources.getString(R.string.error_invalid_initials), Toast.LENGTH_SHORT).show();
 					return;
 				}
 				
 				String name = nameET.getText().toString();
 				if(name.equals("")){
-					Toast.makeText(NewPhoneBookActivity.this, "Please input name", Toast.LENGTH_SHORT).show();
+					Toast.makeText(NewPhoneBookActivity.this, resources.getString(R.string.error_invalid_name), Toast.LENGTH_SHORT).show();
 					return;
 				}
 				
 				String localName = localnameET.getText().toString();
 				if(localName.equals("")){
-					Toast.makeText(NewPhoneBookActivity.this, "Please input local name", Toast.LENGTH_SHORT).show();
+					Toast.makeText(NewPhoneBookActivity.this, resources.getString(R.string.error_invalid_localname), Toast.LENGTH_SHORT).show();
 					return;
 				}
 				
 				String phone = phoneET.getText().toString();
 				if(phone.equals("")){
-					Toast.makeText(NewPhoneBookActivity.this, "Please input phone number", Toast.LENGTH_SHORT).show();
+					Toast.makeText(NewPhoneBookActivity.this, resources.getString(R.string.error_invalid_phone), Toast.LENGTH_SHORT).show();
 					return;
 				}
 				
 				String title = titleET.getText().toString();
 				
 				if(depNoSpinner.getSelectedItemPosition() == 0){
-					Toast.makeText(NewPhoneBookActivity.this, "Please select department number", Toast.LENGTH_SHORT).show();
+					Toast.makeText(NewPhoneBookActivity.this, resources.getString(R.string.error_invalid_depno), Toast.LENGTH_SHORT).show();
 					return;
 				}
 				String depNo = (String)depNoSpinner.getSelectedItem();
 				
 				if(depNameSpinner.getSelectedItemPosition() == 0){
-					Toast.makeText(NewPhoneBookActivity.this, "Please select department name", Toast.LENGTH_SHORT).show();
+					Toast.makeText(NewPhoneBookActivity.this, resources.getString(R.string.error_invalid_dep), Toast.LENGTH_SHORT).show();
 					return;
 				}
 				String depName = (String)depNameSpinner.getSelectedItem();
@@ -252,18 +255,18 @@ public class NewPhoneBookActivity extends Activity{
 				
 				Dialog dialog = new AlertDialog.Builder(NewPhoneBookActivity.this)
 		        	.setIcon(R.drawable.ic_launcher)
-		        	.setTitle("Do you want to save the phonebook info?")
-		        	.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+		        	.setTitle(resources.getString(R.string.info_save_new_phonebook))
+		        	.setPositiveButton(resources.getString(R.string.lable_okbtn),new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							if(!DataManager.getInstance().newPhoneBook(newPbItem)){
-								Toast.makeText(NewPhoneBookActivity.this, "Create phonebook info failed!", Toast.LENGTH_SHORT);
+								Toast.makeText(NewPhoneBookActivity.this, resources.getString(R.string.error_create_phonebook), Toast.LENGTH_SHORT).show();
 								NewPhoneBookActivity.this.finish();
 								return;
 							}
 							
 							if(newPhoto!=null && !DataManager.getInstance().newPhoneBookPhoto(newPbItem.getInitials(), newPhoto)){
-								Toast.makeText(NewPhoneBookActivity.this, "Create phonebook photo failed!", Toast.LENGTH_SHORT);
+								Toast.makeText(NewPhoneBookActivity.this, resources.getString(R.string.error_create_phonebook), Toast.LENGTH_SHORT).show();
 								NewPhoneBookActivity.this.finish();
 								return;
 							}
@@ -274,7 +277,7 @@ public class NewPhoneBookActivity extends Activity{
 							
 						}
 					})
-		        	.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		        	.setNegativeButton(resources.getString(R.string.lable_cancelbtn), new DialogInterface.OnClickListener() {
 						
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -327,7 +330,7 @@ public class NewPhoneBookActivity extends Activity{
 		        		newPhoto.recycle();
 		        	}
 		        	Uri imageUri = intent.getData();
-		        	Toast.makeText(this, "uri:" + imageUri.toString(), Toast.LENGTH_LONG).show();
+		        	Log.d("NewPhoneBook", "uri:" + imageUri.toString());
 		        	if(imageUri != null){
 		        		String schema = imageUri.getScheme();
 		        		String path = null;
@@ -339,10 +342,9 @@ public class NewPhoneBookActivity extends Activity{
 			        	}else{
 			        		path = imageUri.getPath();
 			        	}
-			        	Toast.makeText(this, "Path:" + path, Toast.LENGTH_LONG).show();
-			        	Resources r = getResources();
+			        	Log.d("NewPhoneBook", "Path:" + path);
 		        		try{
-		        			newPhoto = BitmapUtil.getImageThumbnail(path, (int)r.getDimension(R.dimen.photo_width), (int)r.getDimension(R.dimen.photo_height));
+		        			newPhoto = BitmapUtil.getImageThumbnail(path, (int)resources.getDimension(R.dimen.photo_width), (int)resources.getDimension(R.dimen.photo_height));
 		        		}catch(Exception e){
 		        			e.printStackTrace();
 		        		}
@@ -363,15 +365,15 @@ public class NewPhoneBookActivity extends Activity{
 	private void clickCancelButton(){
 		Dialog dialog = new AlertDialog.Builder(NewPhoneBookActivity.this)
     	.setIcon(R.drawable.ic_launcher)
-    	.setTitle("Do you want to cancel the created info?")
-    	.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+    	.setTitle(resources.getString(R.string.info_cancel_new))
+    	.setPositiveButton(resources.getString(R.string.lable_okbtn),new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();		
 				NewPhoneBookActivity.this.finish();
 			}
 		})
-    	.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+    	.setNegativeButton(resources.getString(R.string.lable_cancelbtn), new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -391,9 +393,9 @@ public class NewPhoneBookActivity extends Activity{
 	}
 	
 	private void pickupPhoto() {
-		CharSequence[] items = {"Camera", "Photo Album"};
+		CharSequence[] items = {resources.getString(R.string.lable_camera), resources.getString(R.string.lable_photoalbum)};
 		new AlertDialog.Builder(NewPhoneBookActivity.this)
-			.setTitle("Pick Photo From")
+			.setTitle(resources.getString(R.string.title_pickphoto))
 			.setItems(items, new DialogInterface.OnClickListener(){
 
 				@Override
@@ -410,7 +412,7 @@ public class NewPhoneBookActivity extends Activity{
 							Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 							intent.addCategory(Intent.CATEGORY_OPENABLE);
 							intent.setType("image/*");
-							startActivityForResult(Intent.createChooser(intent, "Please select photo"), PICKPHOTO_BY_ALBUM);
+							startActivityForResult(Intent.createChooser(intent, resources.getString(R.string.title_pickphoto_by_album)), PICKPHOTO_BY_ALBUM);
 							//startActivityForResult(intent, PICKPHOTO_BY_ALBUM);
 						}catch (ActivityNotFoundException e){
 							e.printStackTrace();

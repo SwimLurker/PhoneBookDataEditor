@@ -9,10 +9,12 @@ import com.nnit.phonebook.dataeditor.data.DataManager;
 import com.nnit.phonebook.dataeditor.data.SeatInfo;
 import com.nnit.phonebook.dataeditor.ui.ISeatPositionChangedListener;
 import com.nnit.phonebook.dataeditor.ui.MapView;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.RectF;
@@ -54,10 +56,14 @@ public class EditSeatPositionActivity extends Activity implements ISeatPositionC
 	private LinearLayout floorPanelLayout = null;
 	private LinearLayout infoPanelLayout = null;
 	
+	private Resources resources = null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
+		resources = getResources();
+		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.activity_edit_seatposition);
@@ -257,12 +263,12 @@ public class EditSeatPositionActivity extends Activity implements ISeatPositionC
 				if(dataModified(seatInfo, newSeatInfo)){
 					Dialog dialog = new AlertDialog.Builder(EditSeatPositionActivity.this)
 		        	.setIcon(R.drawable.ic_launcher)
-		        	.setTitle("Data has been modified,do you want to apply the modification?")
-		        	.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+		        	.setTitle(resources.getString(R.string.info_save_modification))
+		        	.setPositiveButton(resources.getString(R.string.lable_okbtn),new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							if(!DataManager.getInstance().updateSeatInfo(initials, newSeatInfo)){
-								Toast.makeText(EditSeatPositionActivity.this, "Update seat info failed!", Toast.LENGTH_SHORT).show();
+								Toast.makeText(EditSeatPositionActivity.this, resources.getString(R.string.error_save_seatinfo), Toast.LENGTH_SHORT).show();
 							}else{
 								setResult(MainActivity.ACTIVITY_RESULT_EDITSEATINFO_OK);
 							}							
@@ -271,7 +277,7 @@ public class EditSeatPositionActivity extends Activity implements ISeatPositionC
 							
 						}
 					})
-		        	.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		        	.setNegativeButton(resources.getString(R.string.lable_cancelbtn), new DialogInterface.OnClickListener() {
 						
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -369,12 +375,12 @@ public class EditSeatPositionActivity extends Activity implements ISeatPositionC
 		if(dataModified(seatInfo, newSeatInfo)){
 			Dialog dialog = new AlertDialog.Builder(EditSeatPositionActivity.this)
         	.setIcon(R.drawable.ic_launcher)
-        	.setTitle("Data has been modified,do you want to save the modification?")
-        	.setPositiveButton("Save",new DialogInterface.OnClickListener() {
+        	.setTitle(resources.getString(R.string.info_save_modification))
+        	.setPositiveButton(resources.getString(R.string.lable_savebtn),new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					if(!DataManager.getInstance().updateSeatInfo(initials, newSeatInfo)){
-						Toast.makeText(EditSeatPositionActivity.this, "Update seat info failed!", Toast.LENGTH_SHORT);
+						Toast.makeText(EditSeatPositionActivity.this, resources.getString(R.string.error_save_seatinfo), Toast.LENGTH_SHORT).show();
 					}
 					
 					dialog.dismiss();	
@@ -383,7 +389,7 @@ public class EditSeatPositionActivity extends Activity implements ISeatPositionC
 					EditSeatPositionActivity.this.finish();
 				}
 			})
-        	.setNegativeButton("Not Save", new DialogInterface.OnClickListener() {
+        	.setNegativeButton(resources.getString(R.string.lable_notsavebtn), new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -415,15 +421,15 @@ public class EditSeatPositionActivity extends Activity implements ISeatPositionC
 		if(dataModified(seatInfo, newSeatInfo)){
 			Dialog dialog = new AlertDialog.Builder(EditSeatPositionActivity.this)
         	.setIcon(R.drawable.ic_launcher)
-        	.setTitle("Data has been modified,do you want to cancel the modification?")
-        	.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+        	.setTitle(resources.getString(R.string.info_cancel_modification))
+        	.setPositiveButton(resources.getString(R.string.lable_okbtn),new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					dialog.dismiss();		
 					EditSeatPositionActivity.this.finish();
 				}
 			})
-        	.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        	.setNegativeButton(resources.getString(R.string.lable_cancelbtn), new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {

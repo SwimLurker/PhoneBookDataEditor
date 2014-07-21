@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="info_cancel_modification">Data has been modified,do you want to cancel the modification?</string>
+    <string name="info_save_modification">Data has been modified,do you want to save the modification?</string>
+    <string name="info_cancel_new">Do you want to cancel the created info?</string>
+    <string name="info_save_new_phonebook">Do you want to save the phonebook info?</string>
+    <string name="info_delete_phonebook">Do you want to delete selected data?</string>
+    <string name="info_delete_map">Do you want to delete selected maps?</string>
+    <string name="info_save_to_disk">Do you want to save the data package to disk?</string>
+    <string name="info_saveto">Save Data Package to </string>
+    <string name="info_save_new_map">Do you want to save the map info?</string>
+    <string name="info_save_new_map_2">You have selected map file, do you want to save the created info?</string>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_save_seatinfo">Update seat info failed!</string>
+    <string name="error_create_phonebook">Create phonebook info failed!</string>
+    <string name="error_invalid_dep" >Please select department name!</string>
+    <string name="error_invalid_depno" >Please select department number!</string>
+    <string name="error_invalid_phone" >Please input phone number!</string>
+    <string name="error_invalid_localname" >Please input local name!</string>
+    <string name="error_invalid_name" >Please input name!</string>
+    <string name="error_invalid_initials">Please input initials!</string>
+    <string name="error_no_right_to_access">No rights to access!</string>
+    <string name="error_invalid_datapackage">Invalid Data Package!</string>
+    <string name="error_save_modification">Save modification failed!</string>
+    <string name="error_save_to_disk">Save Data Package failed!</string>
+    <string name="error_invalid_floor">Please input valid floor number!</string>
+    <string name="error_invalid_mapfile">Please select valid map file!</string>
+    <string name="error_create_map">Create map failed!</string>
+    <string name="error_create_mapimage">Create map image failed!</string>
+    <string name="error_update_phonebook">Update phonebook info failed!</string>
+    <string name="error_update_phonebook_photo">Update phonebook photo failed!</string>
+</resources>

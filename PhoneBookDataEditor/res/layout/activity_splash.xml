@@ -17,7 +17,7 @@
 	    android:layout_alignParentBottom="true" 
 	    android:layout_centerHorizontal="true"
 	    android:text="@string/app_name"
-	    android:textColor="#970722"
+	    android:textColor="#8C0000"
 	    android:textSize="@dimen/splash_titletext_size"
 	    android:textStyle="bold"
 	    android:paddingBottom="@dimen/splash_titletext_bottompadding" />
@@ -28,7 +28,7 @@
 	    android:layout_alignParentBottom="true" 
 	    android:layout_centerHorizontal="true"
 	    android:text="@string/company"
-	    android:textColor="#970722"
+	    android:textColor="#8C0000"
 	    android:textSize="@dimen/splash_companytext_size"
 	    android:textStyle="normal"
 	    android:paddingBottom="@dimen/splash_companytext_bottompadding" />

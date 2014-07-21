@@ -44,10 +44,13 @@ public class NewMapActivity extends Activity{
 	private ImageLoader imageLoader = null;
 	private ImageLoader thumbnailImageLoader = null;
 	
+	private Resources resources = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		resources = getResources();
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
@@ -66,8 +69,8 @@ public class NewMapActivity extends Activity{
 				new ThumbnailImageGetter((int)r.getDimension(R.dimen.map_width_thumbnail_small), 
 						(int)r.getDimension(R.dimen.map_height_thumbnail_small)));
 		
-		TextView tv = (TextView)findViewById(R.id.textview_newmap_title);
-		tv.setText("New Map Item");
+		//TextView tv = (TextView)findViewById(R.id.textview_newmap_title);
+		//tv.setText(resources.getString(R.string.title_new_map));
 		
 		mapIV = (ImageView) findViewById(R.id.new_map_image);
 		
@@ -120,8 +123,8 @@ public class NewMapActivity extends Activity{
 				if(newMapItem != null){
 					Dialog dialog = new AlertDialog.Builder(NewMapActivity.this)
 			        	.setIcon(R.drawable.ic_launcher)
-			        	.setTitle("Do you want to save the map info?")
-			        	.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+			        	.setTitle(resources.getString(R.string.info_save_new_map))
+			        	.setPositiveButton(resources.getString(R.string.lable_okbtn),new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								if(createMapItem()){
@@ -134,7 +137,7 @@ public class NewMapActivity extends Activity{
 								}
 							}
 						})
-			        	.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			        	.setNegativeButton(resources.getString(R.string.lable_cancelbtn), new DialogInterface.OnClickListener() {
 							
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
@@ -156,15 +159,15 @@ public class NewMapActivity extends Activity{
 				if(newMap != null){
 					Dialog dialog = new AlertDialog.Builder(NewMapActivity.this)
 			    	.setIcon(R.drawable.ic_launcher)
-			    	.setTitle("Do you want to cancel the created info?")
-			    	.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+			    	.setTitle(resources.getString(R.string.info_cancel_new))
+			    	.setPositiveButton(resources.getString(R.string.lable_okbtn),new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							dialog.dismiss();		
 							NewMapActivity.this.finish();
 						}
 					})
-			    	.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			    	.setNegativeButton(resources.getString(R.string.lable_cancelbtn), new DialogInterface.OnClickListener() {
 						
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -195,7 +198,7 @@ public class NewMapActivity extends Activity{
 			images.put("jpg", R.drawable.filedialog_jpgfile);
 
 			Dialog dialog = OpenFileDialog.createDialog(id, this,
-					"Select Map Image File",
+					resources.getString(R.string.title_select_mapimage),
 					new OpenFileDialog.CallbackBundle() {
 						@Override
 						public void callback(Bundle bundle) {
@@ -260,8 +263,8 @@ public class NewMapActivity extends Activity{
 			if(newMapItem != null){
 				Dialog dialog = new AlertDialog.Builder(NewMapActivity.this)
 		    	.setIcon(R.drawable.ic_launcher)
-		    	.setTitle("You have selected map file, do you want to save the created info?")
-		    	.setPositiveButton("Save",new DialogInterface.OnClickListener() {
+		    	.setTitle(resources.getString(R.string.info_save_new_map_2))
+		    	.setPositiveButton(resources.getString(R.string.lable_savebtn),new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();		
@@ -271,7 +274,7 @@ public class NewMapActivity extends Activity{
 						}
 					}
 				})
-		    	.setNegativeButton("Not Save", new DialogInterface.OnClickListener() {
+		    	.setNegativeButton(resources.getString(R.string.lable_notsavebtn), new DialogInterface.OnClickListener() {
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -293,19 +296,19 @@ public class NewMapActivity extends Activity{
 	private MapItem checkInput(){
 		int floor = floorNP.getValue();
 		if(floor <= 0){
-			Toast.makeText(NewMapActivity.this, "Please input valid floor number", Toast.LENGTH_SHORT).show();
+			Toast.makeText(NewMapActivity.this, resources.getString(R.string.error_invalid_floor), Toast.LENGTH_SHORT).show();
 			return null;
 		}
 		
 		String filename = filenameTV.getText().toString();
 		if(filename.equals("")){
-			Toast.makeText(NewMapActivity.this, "Please select map file", Toast.LENGTH_SHORT).show();
+			Toast.makeText(NewMapActivity.this, resources.getString(R.string.error_invalid_mapfile), Toast.LENGTH_SHORT).show();
 			return null;
 		}
 		
 		File f = new File(filename);
 		if((!f.exists())||(!f.isFile())){
-			Toast.makeText(NewMapActivity.this, "Please select valid map file", Toast.LENGTH_SHORT).show();
+			Toast.makeText(NewMapActivity.this, resources.getString(R.string.error_invalid_mapfile), Toast.LENGTH_SHORT).show();
 			return null;
 		}
 		
@@ -322,12 +325,12 @@ public class NewMapActivity extends Activity{
 	private boolean createMapItem() {
 		
 		if(!DataManager.getInstance().newMapInfo(newMapItem)){
-			Toast.makeText(NewMapActivity.this, "Create map failed!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(NewMapActivity.this, resources.getString(R.string.error_create_map), Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		
 		if(!DataManager.getInstance().newMapImage(newMapItem,newMap)){
-			Toast.makeText(NewMapActivity.this, "Create map image failed!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(NewMapActivity.this, resources.getString(R.string.error_create_mapimage), Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		

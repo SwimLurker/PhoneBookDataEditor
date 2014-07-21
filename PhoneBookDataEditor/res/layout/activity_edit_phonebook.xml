@@ -43,7 +43,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:padding="10dp"
-                        android:text="Photo:"
+                        android:text="@string/edit_phonebook_photo"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp" />
 
@@ -83,7 +83,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="Initials:"
+                        android:text="@string/edit_phonebook_initials"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp" />
 
@@ -101,7 +101,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="Name:"
+                        android:text="@string/edit_phonebook_name"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp" />
 
@@ -119,7 +119,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="Local Name:"
+                        android:text="@string/edit_phonebook_localname"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp" />
 
@@ -137,7 +137,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="Gender:"
+                        android:text="@string/edit_phonebook_gender"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp" />
 
@@ -152,13 +152,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="true"
-                            android:text="Male" />
+                            android:text="@string/lable_gender_male" />
 
                         <RadioButton
                             android:id="@+id/edit_phonebook_gender_female"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Female" />
+                            android:text="@string/lable_gender_female" />
                     </RadioGroup>
                 </TableRow>
 
@@ -170,7 +170,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="Phone:"
+                        android:text="@string/edit_phonebook_phone"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp" />
 
@@ -189,7 +189,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="Title:"
+                        android:text="@string/edit_phonebook_title"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp" />
 
@@ -207,7 +207,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="Dep.No:"
+                        android:text="@string/edit_phonebook_depno"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp" />
 
@@ -225,7 +225,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="Dep.Name:"
+                        android:text="@string/edit_phonebook_depname"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp" />
 
@@ -243,7 +243,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="Manager:"
+                        android:text="@string/edit_phonebook_manager"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp" />
 
@@ -261,7 +261,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="Seat Position:"
+                        android:text="@string/edit_phonebook_seat"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp" 
                         android:layout_gravity="bottom" />
