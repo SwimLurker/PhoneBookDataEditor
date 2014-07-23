@@ -102,6 +102,7 @@ public class MapView extends ImageView{
 			this.bitmapWidth = bitmap.getWidth();
 			this.bitmapHeight = bitmap.getHeight();
 		}
+		invalidate();
 	}
 	
 	
