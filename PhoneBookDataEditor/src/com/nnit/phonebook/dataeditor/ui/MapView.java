@@ -304,6 +304,7 @@ public class MapView extends ImageView{
 			
 			float afterLength = getDistance(event);
 			if (afterLength > 10f) {
+				midPoint(mid, event);
 				matrix.set(savedMatrix);
 				float scale = afterLength / beforeLength;
 				matrix.postScale(scale, scale, mid.x, mid.y);
@@ -338,8 +339,8 @@ public class MapView extends ImageView{
 	}
 	
 	private void midPoint(PointF point, MotionEvent event) {
-		float x = event.getX(0) - event.getX(1);
-		float y = event.getY(0) - event.getY(1);
+		float x = event.getX(0) + event.getX(1);
+		float y = event.getY(0) + event.getY(1);
 
 		point.set(x / 2, y / 2);
 	}
